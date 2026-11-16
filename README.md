@@ -1,5 +1,5 @@
 # goit-devops
 
-ДЗ 1: [lesson-3 branch](https://github.com/rubannn/goit-devops/tree/lesson-3)
+[Запуск Django + PostgreSQL + Nginx](INSTALL.md)
 
-ДЗ 2: [lesson-4 branch](https://github.com/rubannn/goit-devops/tree/lesson-4)
+![Скріншот запуску проєкту](01.png)
