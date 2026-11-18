@@ -45,9 +45,6 @@ set +a
 Порожнє значення `DEV_TOOLS_VENV` залишає стандартний шлях `.venv` поруч
 зі скриптом. Сам файл `.env` ігнорується Git.
 
-Під час підготовки цього завдання скрипт не запускався, перевірки Bash
-та ShellCheck не виконувалися згідно з побажанням користувача.
-
 Джерела: [Docker для Ubuntu](https://docs.docker.com/engine/install/ubuntu/),
 [Docker для Debian](https://docs.docker.com/engine/install/debian/),
 [Python venv](https://docs.python.org/3/library/venv.html).
