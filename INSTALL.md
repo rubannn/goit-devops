@@ -25,8 +25,7 @@ Compose автоматично читає `.env`. Спочатку запуск�
 
 Сторінка виконує SQL-запит до PostgreSQL; якщо база недоступна, повертає HTTP 503.
 Якщо порт 80 зайнятий, задайте `HTTP_PORT=8080` у `.env` і відкрийте
-http://localhost:8080. Для старої окремої версії Compose команда має назву
-`docker-compose`; якщо вона не підтримує `--wait`, приберіть цей параметр.
+http://localhost:8080.
 
 Перевірка стану та журналів:
 
@@ -37,9 +36,10 @@ docker compose exec web python manage.py check
 docker compose exec db psql -U devops -d devops -c "SELECT 1;"
 ```
 
-В останній команді замініть `devops`, якщо змінювали користувача або назву бази.
-Дані зберігаються в томі `postgres_data` після зупинки й повторного запуску.
-Зміна пароля в `.env` не змінює пароль уже створеної бази.
+В останній команді перше `devops` — це ім’я користувача PostgreSQL, а друге —
+назва бази даних. Замініть їх, якщо вказали інші значення під час налаштування.
+Дані зберігаються в томі `postgres_data` навіть після зупинки та повторного запуску.
+Зміна пароля в `.env` не змінює пароль користувача у вже створеній базі.
 
 За наявності GNU Make можна користуватися короткими командами:
 
@@ -60,9 +60,3 @@ make clean   # Видалити контейнери, мережу та обра
 docker compose down
 ```
 
-Це навчальний локальний запуск: лише Nginx доступний з комп'ютера,
-PostgreSQL і Gunicorn доступні всередині мережі Compose.
-
-Документація: [Gunicorn у Django](https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/gunicorn/),
-[порядок запуску Compose](https://docs.docker.com/compose/how-tos/startup-order/),
-[образ PostgreSQL](https://hub.docker.com/_/postgres).
