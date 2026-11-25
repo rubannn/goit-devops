@@ -18,21 +18,6 @@ module "s3_backend" {
   table_name  = var.table_name
 }
 
-variable "aws_region" {
-  type    = string
-  default = "us-west-2"
-}
-
-variable "bucket_name" {
-  description = "Globally unique name for the Terraform state bucket."
-  type        = string
-}
-
-variable "table_name" {
-  type    = string
-  default = "terraform-locks"
-}
-
 output "bucket_url" {
   value = module.s3_backend.bucket_url
 }
@@ -40,3 +25,4 @@ output "bucket_url" {
 output "dynamodb_table_name" {
   value = module.s3_backend.dynamodb_table_name
 }
+

@@ -13,6 +13,6 @@ module "vpc" {
 
 module "ecr" {
   source       = "./modules/ecr"
-  ecr_name     = "lesson-5-ecr"
+  ecr_name     = "devops-lesson-5-ecr"
   scan_on_push = true
 }

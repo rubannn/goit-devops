@@ -8,5 +8,11 @@ terraform {
     }
   }
 
-  backend "s3" {}
+  backend "s3" {
+    bucket         = "devops-rnn-s3"
+    key            = "lesson-5/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "devops-rnn-terraform-locks"
+    encrypt        = true
+  }
 }

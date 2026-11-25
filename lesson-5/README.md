@@ -1,6 +1,6 @@
-﻿# Урок 5: Terraform та AWS
+# Урок 5: Terraform та AWS
 
-Проєкт створює мережу VPC і репозиторій ECR, використовуючи S3 для зберігання стану Terraform і DynamoDB для блокування. Потрібні Terraform >= 1.5, облікові дані AWS із необхідними правами та глобально унікальне ім’я S3-бакета. Типовий регіон — `us-west-2`.
+Проєкт створює мережу VPC і репозиторій ECR, використовуючи S3 для зберігання стану Terraform і DynamoDB для блокування. Потрібні Terraform >= 1.5, облікові дані AWS із необхідними правами та глобально унікальне ім’я S3-бакета. Типовий регіон — `us-east-1`.
 
 ## Структура
 
@@ -18,33 +18,31 @@ S3-бакет і таблиця DynamoDB мають існувати до зап
 
 ## Створення backend
 
-Із каталогу `lesson-5` (приклади для PowerShell):
+Значення бакета, регіону й таблиці задані в `bootstrap/variables.tf`. Ім’я бакета має бути глобально унікальним. Із каталогу `lesson-5` (приклади для PowerShell):
 
 ```powershell
 cd bootstrap
 terraform init
-terraform plan -var="bucket_name=YOUR-UNIQUE-BUCKET"
-terraform apply -var="bucket_name=YOUR-UNIQUE-BUCKET"
+terraform plan
+terraform apply
 cd ..
 ```
 
-Збережіть `bootstrap/terraform.tfstate` у захищеному місці: він містить стан ресурсів backend. Не додавайте його до Git. Для іншого регіону вказуйте однаковий `aws_region` в усіх командах bootstrap, а також відповідні регіон і зони доступності в основній конфігурації.
+Збережіть `bootstrap/terraform.tfstate` у захищеному місці: він містить стан ресурсів backend. Не додавайте його до Git. Якщо змінюєте параметри backend, оновіть відповідні значення в `backend.tf`: блок backend не підтримує змінні Terraform.
 
 ## Запуск інфраструктури
 
-Скопіюйте `backend.hcl.example` у `backend.hcl` і замініть ім’я бакета; регіон та ім’я таблиці мають збігатися з bootstrap. Файл backend не використовує змінні Terraform. Далі:
+Після успішного `terraform apply` у bootstrap виконайте з каталогу `lesson-5`:
 
 ```powershell
-Copy-Item backend.hcl.example backend.hcl
-# Відредагуйте backend.hcl
-terraform init -backend-config=backend.hcl
+terraform init
 terraform plan
 terraform apply
 terraform output
 ```
 
-Змінюючи регіон, задайте також `aws_region` і три різні `availability_zones`, наприклад через `terraform.tfvars`. Параметр `dynamodb_table` використано за умовою завдання; блокування DynamoDB у сучасних версіях Terraform оголошено застарілим.
+Змінюючи регіон, задайте також `aws_region` і три відповідні `availability_zones` у `variables.tf` основного проєкту. Параметр `dynamodb_table` використано за умовою завдання; блокування DynamoDB у сучасних версіях Terraform оголошено застарілим.
 
 ## Видалення
 
-Спочатку видаліть основну інфраструктуру командою `terraform destroy` із `lesson-5`, поки backend існує. ECR не видалиться, доки в ньому є образи: видаліть їх заздалегідь. Потім із `bootstrap` виконайте `terraform destroy -var="bucket_name=YOUR-UNIQUE-BUCKET"` із тими самими параметрами, що й під час створення. Бакет S3 з увімкненим версіюванням не видалиться, доки в ньому є версії стану та маркери видалення: збережіть потрібні дані й видаліть усі версії та маркери вручну перед видаленням backend. Видалення backend знищить віддалений стан; локальний стан bootstrap потрібно зберігати до завершення очищення.
+Спочатку видаліть основну інфраструктуру командою `terraform destroy` із `lesson-5`, поки backend існує. ECR не видалиться, доки в ньому є образи: видаліть їх заздалегідь. Потім із `bootstrap` виконайте `terraform destroy` з тими самими значеннями змінних, що й під час створення. Бакет S3 з увімкненим версіюванням не видалиться, доки в ньому є версії стану та маркери видалення: збережіть потрібні дані й видаліть усі версії та маркери вручну перед видаленням backend. Видалення backend знищить віддалений стан; локальний стан `bootstrap` потрібно зберігати до завершення очищення.
