@@ -1,0 +1,18 @@
+terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+
+  backend "s3" {
+    bucket         = "devops-rnn-s3-lesson7"
+    key            = "lesson-7/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "devops-rnn-terraform-locks-lesson7"
+    encrypt        = true
+  }
+}

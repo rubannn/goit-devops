@@ -1,0 +1,36 @@
+replicaCount: 2
+
+image:
+  repository: "123456789012.dkr.ecr.us-east-1.amazonaws.com/devops-rnn-ecr-lesson7"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+# Переносимо змінні середовища застосунку з теми 4 (.env.example) у ConfigMap.
+# Значення нижче лише приклад — перед деплоєм замініть на реальні (секрети краще
+# передавати через Kubernetes Secret, а не ConfigMap, у продакшн-середовищі).
+configMap:
+  DJANGO_SECRET_KEY: "change-me-before-deploy"
+  DJANGO_DEBUG: "False"
+  DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
+  POSTGRES_DB: "devops"
+  POSTGRES_USER: "devops"
+  POSTGRES_PASSWORD: "change-me-before-deploy"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
